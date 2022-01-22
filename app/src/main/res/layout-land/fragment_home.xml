@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.nasa_googlemaps_api_project.home.HomeViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:baselineAligned="false">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/image_of_the_day"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:contentDescription="@string/nasa_image_of_the_day"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ImageContrastCheck" />
+
+            <TextView
+                android:id="@+id/image_of_the_day_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:alpha="0"
+                android:textSize="20sp"
+                android:background="#55010613"
+                android:contentDescription="@{viewModel.imageOfDayTitle}"
+                android:text="@{viewModel.imageOfDayTitle}"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/loading_indicator_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/loading_nasa_image_of_the_day"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:trackCornerRadius="20dp" />
+
+            <!-- Layout for display an error -->
+            <TextView
+                android:id="@+id/error_text_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:text="@string/error_nfailed_to_load_image"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/error"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/error_try_again_button_home"
+                style="@style/ThemeOverlay.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:alpha="0"
+                android:text="@string/try_again"
+                android:textColor="@color/error"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/error_text_home" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:layoutDescription="@xml/fragment_home_scene">
+
+            <ImageView
+                android:id="@+id/nasa_logo_home"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/nasa_logo_circle"
+                android:contentDescription="@string/nasa_logo" />
+
+            <Button
+                android:id="@+id/mars_images_button_home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/images_of_mars_button"
+                android:text="@string/images_of_mars"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck"
+                tools:layout_editor_absoluteX="32dp"
+                tools:layout_editor_absoluteY="283dp" />
+
+            <Button
+                android:id="@+id/earth_satellite_view_button_home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/earth_satellite_view_button"
+                android:text="@string/earth_satellite_view"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck"
+                tools:layout_editor_absoluteX="32dp"
+                tools:layout_editor_absoluteY="347dp" />
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    </LinearLayout>
+</layout>

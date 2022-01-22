@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Nasa_GoogleMaps_Api_Project</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nasa_image_of_the_day">NASA image of the day</string>
+    <string name="nasa_logo">NASA logo</string>
+    <string name="earth_satellite_view">Earth Satellite View</string>
+    <string name="images_of_mars">Images of Mars</string>
+    <string name="images_of_mars_button">Images of Mars</string>
+    <string name="earth_satellite_view_button">Earth Satellite View</string>
+    <string name="loading_nasa_image_of_the_day">Loading NASA Image of the day</string>
+    <string name="error_nfailed_to_load_image">Error\nFailed to load image</string>
+    <string name="try_again">Try again</string>
+</resources>
