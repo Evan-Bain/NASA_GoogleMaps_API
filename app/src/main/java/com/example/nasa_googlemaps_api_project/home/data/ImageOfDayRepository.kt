@@ -31,11 +31,15 @@ class ImageOfDayRepository(
                 if (currentDateData.await().media_type == "image") {
                     return@withContext Result.success(currentDateData.await())
                 } else {
-                    var randomDateData = api.getImageOfDay(randomDate())
-                    while (randomDateData.media_type != "image") {
-                        randomDateData = api.getImageOfDay(randomDate())
+                    var randomDateData = async{
+                        api.getImageOfDay(randomDate())
                     }
-                    return@withContext Result.success(randomDateData)
+                    while (randomDateData.await().media_type != "image") {
+                        randomDateData = async{
+                            api.getImageOfDay(randomDate())
+                        }
+                    }
+                    return@withContext Result.success(randomDateData.await())
                 }
             }
 

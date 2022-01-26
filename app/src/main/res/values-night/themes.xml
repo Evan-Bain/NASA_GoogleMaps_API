@@ -31,7 +31,16 @@
         <item name="colorPrimaryInverse">@color/md_theme_dark_primaryInverse</item>
     </style>
 
-    <style name="MyActionBar" parent="Theme.Material3.Dark" >
+    <style name="MyActionBar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary" >
         <item name="android:background">@color/md_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_onPrimaryContainer</item>
+    </style>
+
+    <style name="Background" parent="Theme.Material3.Dark" >
+        <item name="android:background">@color/md_theme_dark_background</item>
+    </style>
+
+    <style name="Background55" parent="Theme.Material3.Light" >
+        <item name="android:background">@color/background55_dark</item>
     </style>
 </resources>

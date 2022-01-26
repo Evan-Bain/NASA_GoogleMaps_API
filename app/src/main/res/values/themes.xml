@@ -35,4 +35,11 @@
         <item name="android:background">@color/md_theme_light_primary</item>
     </style>
 
+    <style name="Background" parent="Theme.Material3.Light" >
+        <item name="android:background">@color/md_theme_light_background</item>
+    </style>
+
+    <style name="Background55" parent="Theme.Material3.Light" >
+        <item name="android:background">@color/background55_light</item>
+    </style>
 </resources>

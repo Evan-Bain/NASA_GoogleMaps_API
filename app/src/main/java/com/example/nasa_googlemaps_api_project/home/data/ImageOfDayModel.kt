@@ -1,6 +1,7 @@
 package com.example.nasa_googlemaps_api_project.home.data
 
 import android.graphics.Bitmap
+import com.example.nasa_googlemaps_api_project.home.HomeGlobals.todayDate
 import com.example.nasa_googlemaps_api_project.home.data.room.ImageOfDayEntities
 import com.squareup.moshi.Json
 
@@ -15,7 +16,7 @@ data class ImageOfDayModel(
         fun ImageOfDayModel.map(bitmap: Bitmap): ImageOfDayEntities {
             return ImageOfDayEntities(
                 0,
-                this.date,
+                todayDate(),
                 this.media_type,
                 this.title,
                 bitmap

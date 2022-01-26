@@ -13,10 +13,37 @@
         <action
             android:id="@+id/action_homeFragment_to_marsImagesFragment"
             app:destination="@id/marsImagesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_satelliteImagesFragment"
+            app:destination="@id/satelliteImagesFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/marsImagesFragment"
         android:name="com.example.nasa_googlemaps_api_project.mars_images.MarsImagesFragment"
-        android:label="Images of Mars"
-        tools:layout="@layout/fragment_mars_images" />
+        android:label="Mars Images"
+        tools:layout="@layout/fragment_mars_images" >
+    </fragment>
+    <fragment
+        android:id="@+id/satelliteImagesFragment"
+        android:name="com.example.nasa_googlemaps_api_project.satellite_images.fragments.SatelliteImagesFragment"
+        android:label="Satellite Images"
+        tools:layout="@layout/fragment_satellite_images">
+        <action
+            android:id="@+id/action_satelliteImagesFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment"
+            app:enterAnim="@anim/slide_up_into"
+            app:exitAnim="@anim/slide_up_out"
+            app:popEnterAnim="@anim/slide_down_into"
+            app:popExitAnim="@anim/slide_down_out"
+            app:popUpTo="@id/satelliteImagesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.nasa_googlemaps_api_project.satellite_images.fragments.MapsFragment"
+        android:label="Map"
+        tools:layout="@layout/fragment_maps">
+    </fragment>
+
 </navigation>

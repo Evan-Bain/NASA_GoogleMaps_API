@@ -9,4 +9,6 @@
     <string name="loading_nasa_image_of_the_day">Loading NASA Image of the day</string>
     <string name="error_nfailed_to_load_image">Error\nFailed to load image</string>
     <string name="try_again">Try again</string>
+    <string name="map_of_the_earth_provided_by_google_maps">Map of the Earth provided by Google Maps</string>
+    <string name="click_to_return_to_earth_satellite_images">return to Earth Satellite Images</string>
 </resources>
