@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.nasa_googlemaps_api_project.satellite_images.SatelliteViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <View
+            android:id="@+id/app_bar_divider_top"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".025"
+            android:background="?attr/colorOnPrimarySurface"/>
+
+        <ImageView
+            android:id="@+id/pull_down_button"
+            style="@style/MyActionBar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".95"
+            android:contentDescription="@string/click_to_return_to_earth_satellite_images"
+            android:onClick="@{() -> viewModel.activateGoogleMapsButton(false)}"
+            android:src="@drawable/ic_round_keyboard_arrow_up_24" />
+
+        <View
+            android:id="@+id/app_bar_divider_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".025"
+            android:background="?attr/colorOnPrimarySurface"/>
+
+        <FrameLayout
+            android:id="@+id/bottom_frame_map"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9" >
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                android:contentDescription="@string/map_of_the_earth_provided_by_google_maps" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/loading_indicator_top_map"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:indeterminate="true"
+                android:layout_gravity="top"
+                app:indicatorColor="?attr/colorOnPrimarySurface"
+                app:trackColor="?attr/colorPrimary"
+                app:trackCornerRadius="20dp"
+                android:scaleY="0"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/loading_indicator_maps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                app:trackCornerRadius="20dp" />
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>
