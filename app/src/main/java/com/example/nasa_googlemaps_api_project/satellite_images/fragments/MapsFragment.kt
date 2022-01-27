@@ -6,12 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.nasa_googlemaps_api_project.createMarkerClickListener
 import com.example.nasa_googlemaps_api_project.databinding.FragmentMapsBinding
+import com.example.nasa_googlemaps_api_project.fade
 import com.example.nasa_googlemaps_api_project.satellite_images.SatelliteViewModel
+import com.example.nasa_googlemaps_api_project.scaleY
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+
 
 class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
@@ -56,8 +60,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
         //As map loads certain areas display loading indicator at top
         map.setOnCameraMoveListener {
             map.setOnMapLoadedCallback(this)
-            scaleY(binding.loadingIndicatorTopMap, true)
+            binding.loadingIndicatorTopMap.scaleY(true, 250)
         }
+
+        map.createMarkerClickListener()
     }
 
     override fun onStart() {
@@ -91,40 +97,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
         mapView.onLowMemory()
     }
 
-    /** Fade in a view **/
-    private fun fadeIn(view: View) {
-        ObjectAnimator.ofFloat(view, View.ALPHA, 1f).apply {
-            //default duration is .5s if duration not set
-            duration = 1000
-            setAutoCancel(true)
-            start()
-        }
-    }
-
-    /** Scale the Y value of a view in or out **/
-    private fun scaleY(view: View, start: Boolean) {
-        if(start) {
-            ObjectAnimator.ofFloat(view, View.SCALE_Y, 1f).apply {
-                duration = 250
-                start()
-            }
-        } else {
-            ObjectAnimator.ofFloat(view, View.SCALE_Y, 0f).apply {
-                start()
-            }
-        }
-    }
-
     override fun onMapLoaded() {
         //If statement - to avoid unnecessary code running just for top loading indicator to disappear
         if(firstLoad) {
             //When map has loaded make loading indicator disappear and map fade in
             binding.loadingIndicatorMaps.visibility = View.GONE
-            fadeIn(binding.mapView)
+            binding.mapView.fade(true)
             firstLoad = false
         } else {
             //When map has finished loading certain areas hide loading indicator at top
-            scaleY(binding.loadingIndicatorTopMap, false)
+            binding.loadingIndicatorTopMap.scaleY(false)
         }
     }
 }
