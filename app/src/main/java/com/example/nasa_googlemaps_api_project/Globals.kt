@@ -1,8 +1,8 @@
-package com.example.nasa_googlemaps_api_project.home
+package com.example.nasa_googlemaps_api_project
 
 import java.util.*
 
-object HomeGlobals {
+object Globals {
     const val BASE_URL = "https://api.nasa.gov/"
     const val API_KEY = "3q2XHjcF8hQVgUtvtTXOQ2pZ8vfkV4MxcbGHyevw"
 

@@ -1,10 +1,13 @@
 package com.example.nasa_googlemaps_api_project
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.animation.TypeEvaluator
 import android.annotation.SuppressLint
+import android.graphics.Point
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.util.Property
 import android.view.MotionEvent
 import android.view.View
@@ -17,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.Projection
@@ -29,10 +33,11 @@ import kotlin.math.sign
 
 /** Converts a url into a drawable that is inserted into the imageView **/
 fun ImageView.bindImageViewToUrl(
-    url: String, loadingIndicator: CircularProgressIndicator,
+    url: String, loadingIndicator: CircularProgressIndicator? = null,
     function: ((Drawable) -> Unit?)? = null,
     imageView: ImageView? = null, textView: TextView? = null
 ) {
+    loadingIndicator?.visibility = View.VISIBLE
 
     val imgUri = url.toUri().buildUpon().scheme("https").build()
     Glide.with(this.context)
@@ -44,7 +49,7 @@ fun ImageView.bindImageViewToUrl(
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
-                loadingIndicator.visibility = View.GONE
+                loadingIndicator?.visibility = View.GONE
                 return false
             }
 
@@ -55,8 +60,9 @@ fun ImageView.bindImageViewToUrl(
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                loadingIndicator.visibility = View.GONE
+                loadingIndicator?.visibility = View.GONE
 
+                //fade in views when ready
                 imageView?.fade(true)
                 textView?.fade(true)
 
@@ -75,20 +81,21 @@ fun ImageView.bindImageViewToUrl(
 //END OF BIND IMAGE TO URL
 
 /** Create an animated marker on map click **/
-fun GoogleMap.createMarkerClickListener() {
-    this.setOnMapClickListener {
-        val proj: Projection = this.projection
-        val targetPoint = proj.toScreenLocation(it)
-        val startPoint = proj.toScreenLocation(it)
-        startPoint.y = targetPoint.y - 100
-        val startLatLng = proj.fromScreenLocation(startPoint)
+fun GoogleMap.createMarker(position: LatLng) {
 
-        val marker = this.addMarker(
-            MarkerOptions()
-            .position(startLatLng))
+    val proj: Projection = this.projection
+    val targetPoint = proj.toScreenLocation(position)
+    val startPoint = proj.toScreenLocation(position)
+    startPoint.y = targetPoint.y - 100
+    val startLatLng = proj.fromScreenLocation(startPoint)
 
-        animateMarker(marker, it, LatLngInterpolator.LinearFixed())
-    }
+    val marker = this.addMarker(
+        MarkerOptions()
+            .position(startLatLng)
+            .title("View image")
+    )
+
+    animateMarker(marker, position, LatLngInterpolator.LinearFixed())
 }
 
 /* Copyright 2013 Google Inc.
@@ -100,15 +107,17 @@ private fun animateMarker(
 ) {
     val typeEvaluator: TypeEvaluator<LatLng> =
         TypeEvaluator<LatLng> { fraction, startValue, endValue ->
-            latLngInterpolator.interpolate(fraction, startValue, endValue) }
+            latLngInterpolator.interpolate(fraction, startValue, endValue)
+        }
     val property: Property<Marker, LatLng> = Property.of(
         Marker::class.java,
         LatLng::class.java, "position"
     )
-    val animator = ObjectAnimator.ofObject(marker, property, typeEvaluator, finalPosition)
-    animator.duration = 1500
-    animator.interpolator = LinearOutSlowInInterpolator()
-    animator.start()
+    ObjectAnimator.ofObject(marker, property, typeEvaluator, finalPosition).apply {
+        duration = 1500
+        interpolator = LinearOutSlowInInterpolator()
+        start()
+    }
 }
 
 /* Copyright 2013 Google Inc.
@@ -137,7 +146,12 @@ interface LatLngInterpolator {
 
 /** Fades a view in or out **/
 fun View.fade(fadeIn: Boolean, animDuration: Long? = null) {
-    if(fadeIn){
+    if (fadeIn) {
+        //if view is gone make it visible
+        if(this.visibility == View.GONE) {
+            this.visibility = View.VISIBLE
+        }
+
         ObjectAnimator.ofFloat(this, View.ALPHA, 1f).apply {
 
             duration = animDuration ?: duration
@@ -145,9 +159,31 @@ fun View.fade(fadeIn: Boolean, animDuration: Long? = null) {
             start()
         }
     } else {
+        val view = this
         ObjectAnimator.ofFloat(this, View.ALPHA, 0f).apply {
 
             duration = animDuration ?: duration
+
+            //make view completely disappear after completion
+            addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+                    //NOTHING
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    view.visibility = View.GONE
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+                    view.visibility = View.GONE
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+                    //NOTHING
+                }
+
+            })
+
             setAutoCancel(true)
             start()
         }
@@ -190,7 +226,7 @@ fun Button.animateScaleOnLongClick() {
 
 /** Scale the Y value of a view in or out **/
 fun View.scaleY(start: Boolean, animDuration: Long? = null) {
-    if(start) {
+    if (start) {
         ObjectAnimator.ofFloat(this, View.SCALE_Y, 1f).apply {
             duration = animDuration ?: duration
             start()
@@ -202,5 +238,48 @@ fun View.scaleY(start: Boolean, animDuration: Long? = null) {
         }
     }
 }
+//END OF SCALE Y
+
+/** Convert LatLng to coordinates on phone **/
+fun List<LatLng>.toCoordinates(map: GoogleMap): List<List<Double>> {
+    val proj: Projection = map.projection
+
+    val coordinateList = mutableListOf<List<Double>>()
+
+    //create bounds for each position in list
+    this.forEach {
+        //get screen coordinates at the current LatLng
+        val point = proj.toScreenLocation(it)
+        val left = point.x - 100
+        val right = point.x + 100
+        val top = point.y - 100
+        val bottom = point.y + 100
+
+        //convert bounds into two points diagonal of each other
+        val topRight = Point(right, top)
+        val bottomLeft = Point(left, bottom)
+
+        //convert the two points into LatLng points and get the bounds in north, south, west, and east
+        val northEast = proj.fromScreenLocation(topRight)
+        val north = northEast.latitude
+        val east = northEast.longitude
+
+        val southWest = proj.fromScreenLocation(bottomLeft)
+        val south = southWest.latitude
+        val west = southWest.longitude
+
+        //add the bounds to be returned in a list which corresponds to a marker
+        coordinateList.add(listOf(
+            south,
+            north,
+            west,
+            east
+        ))
+    }
+
+    return coordinateList
+}
+//END OF TO COORDINATES
+
 
 

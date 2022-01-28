@@ -53,6 +53,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.0-alpha02'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
 
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
     //NETWORK
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
@@ -60,8 +62,12 @@ dependencies {
     implementation "com.squareup.moshi:moshi:1.9.3"
     implementation "com.squareup.moshi:moshi-kotlin:1.9.3"
 
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation "com.squareup.okhttp3:okhttp:3.14.9"
+    implementation ('com.github.bumptech.glide:okhttp3-integration:4.7.1'){
+        exclude group: 'glide-parent'
+    }
 
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
 

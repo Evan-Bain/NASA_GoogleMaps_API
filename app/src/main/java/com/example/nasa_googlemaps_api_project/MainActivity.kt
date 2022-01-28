@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
                 when(it) {
                     true -> navController.navigate(
-                            SatelliteImagesFragmentDirections.actionSatelliteImagesFragmentToMapsFragment())
+                        SatelliteImagesFragmentDirections.actionSatelliteImagesFragmentToMapsFragment())
 
                     false -> navController.navigateUp()
                 }

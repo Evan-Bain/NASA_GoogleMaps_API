@@ -10,41 +10,61 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motion_layout_maps"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="10">
+        app:layoutDescription="@xml/fragment_maps_scene">
 
         <View
             android:id="@+id/app_bar_divider_top"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".05"
-            android:background="?attr/colorOnPrimarySurface"/>
+            app:layout_constraintVertical_weight=".05"
+            android:background="?attr/colorOnPrimarySurface"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/pull_down_button"/>
 
         <ImageView
             android:id="@+id/pull_down_button"
             style="@style/MyActionBar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.90"
+            app:layout_constraintVertical_weight="1.9"
             android:contentDescription="@string/click_to_return_to_earth_satellite_images"
             android:onClick="@{() -> viewModel.activateGoogleMapsButton(false)}"
-            android:src="@drawable/ic_round_keyboard_arrow_up_24" />
+            android:src="@drawable/ic_round_keyboard_arrow_up_24"
+            app:layout_constraintTop_toBottomOf="@id/app_bar_divider_top"
+            app:layout_constraintBottom_toTopOf="@id/app_bar_divider_bottom" />
 
         <View
             android:id="@+id/app_bar_divider_bottom"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".05"
-            android:background="?attr/colorOnPrimarySurface"/>
+            app:layout_constraintVertical_weight=".05"
+            android:background="?attr/colorOnPrimarySurface"
+            app:layout_constraintTop_toBottomOf="@id/pull_down_button"
+            app:layout_constraintBottom_toTopOf="@id/map_view_layout"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/enter_image_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#990000"
+            app:layout_constraintTop_toBottomOf="@id/app_bar_divider_bottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
-            android:id="@+id/bottom_frame_map"
+            android:id="@+id/map_view_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="8">
+            app:layout_constraintVertical_weight="8"
+            app:layout_constraintTop_toBottomOf="@id/app_bar_divider_bottom"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/map_view"
@@ -73,5 +93,5 @@
                 app:trackCornerRadius="20dp" />
         </FrameLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

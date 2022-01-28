@@ -1,7 +1,7 @@
 package com.example.nasa_googlemaps_api_project.home.data
 
 import android.graphics.Bitmap
-import com.example.nasa_googlemaps_api_project.home.HomeGlobals.todayDate
+import com.example.nasa_googlemaps_api_project.Globals.todayDate
 import com.example.nasa_googlemaps_api_project.home.data.room.ImageOfDayEntities
 import com.squareup.moshi.Json
 

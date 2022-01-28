@@ -2,8 +2,8 @@ package com.example.nasa_googlemaps_api_project.home.data
 
 import android.graphics.drawable.Drawable
 import android.util.Log
-import com.example.nasa_googlemaps_api_project.home.HomeGlobals.randomDate
-import com.example.nasa_googlemaps_api_project.home.HomeGlobals.todayDate
+import com.example.nasa_googlemaps_api_project.Globals.randomDate
+import com.example.nasa_googlemaps_api_project.Globals.todayDate
 import com.example.nasa_googlemaps_api_project.home.data.ImageOfDayModel.Companion.map
 import com.example.nasa_googlemaps_api_project.home.data.room.ImageOfDayDao
 import com.example.nasa_googlemaps_api_project.home.data.room.ImageOfDayEntities

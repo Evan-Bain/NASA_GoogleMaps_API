@@ -13,4 +13,7 @@
     <string name="map_of_the_earth_provided_by_google_maps">Map of the Earth provided by Google Maps</string>
     <string name="pull_down_to_return_to_earth_satellite_images_page">Pull down to return to Earth Satellite Images Page</string>
     <string name="click_to_return_to_earth_satellite_images">return to Earth Satellite Images</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
+    <string name="save_image">Save image</string>
 </resources>

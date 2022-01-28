@@ -7,6 +7,8 @@ import com.example.nasa_googlemaps_api_project.home.data.room.ImageOfDayDatabase
 import com.example.nasa_googlemaps_api_project.home.network.ImageOfDayApiClient
 import com.example.nasa_googlemaps_api_project.home.network.ImageOfDayApiInterface
 import com.example.nasa_googlemaps_api_project.satellite_images.SatelliteViewModel
+import com.example.nasa_googlemaps_api_project.satellite_images.data.network.EarthSatelliteApiClient
+import com.example.nasa_googlemaps_api_project.satellite_images.data.network.EarthSatelliteRepository
 import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -38,7 +40,10 @@ class App : Application() {
         val satelliteSharedModule = module {
 
             //ViewModel shared between fragments associated with ViewPagerFragment
-            viewModel { SatelliteViewModel() }
+            viewModel { SatelliteViewModel(get()) }
+
+            single { EarthSatelliteApiClient.createApi() }
+            single { EarthSatelliteRepository(get(), Dispatchers.Default) }
         }
 
         return listOf(homeModule, satelliteSharedModule)

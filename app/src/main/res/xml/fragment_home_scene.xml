@@ -89,7 +89,4 @@
             app:layout_constraintEnd_toEndOf="parent"/>
     </ConstraintSet>
 
-    <Transition
-        app:constraintSetEnd="@id/end"
-        app:constraintSetStart="@+id/start" />
 </MotionScene>

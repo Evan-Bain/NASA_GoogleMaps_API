@@ -1,7 +1,9 @@
-package com.example.nasa_googlemaps_api_project.home.network
+package com.example.nasa_googlemaps_api_project.satellite_images.data.network
 
+import com.example.nasa_googlemaps_api_project.Globals
 import com.example.nasa_googlemaps_api_project.Globals.API_KEY
 import com.example.nasa_googlemaps_api_project.Globals.BASE_URL
+import com.example.nasa_googlemaps_api_project.home.network.ImageOfDayApiInterface
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
@@ -10,7 +12,7 @@ import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class ImageOfDayApiClient {
+class EarthSatelliteApiClient {
 
     companion object {
 
@@ -22,15 +24,15 @@ class ImageOfDayApiClient {
             .addInterceptor { chain -> return@addInterceptor  addApiKeyToClient(chain)}
             .build()
 
-        /** Creates the api for for the Nasa Image Of The Day **/
-        fun createApi() : ImageOfDayApiInterface {
+        /** Creates the api for for the Earth Satellite **/
+        fun createApi() : EarthSatelliteApiInterface {
 
             return Retrofit.Builder()
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .baseUrl(BASE_URL)
                 .client(client)
                 .build()
-                .create(ImageOfDayApiInterface::class.java)
+                .create(EarthSatelliteApiInterface::class.java)
         }
 
         /** Adds the Nasa Api key to the Http client**/
@@ -43,4 +45,5 @@ class ImageOfDayApiClient {
             return chain.proceed(request.build())
         }
     }
+
 }
