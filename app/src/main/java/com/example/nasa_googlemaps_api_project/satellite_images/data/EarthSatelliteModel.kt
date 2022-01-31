@@ -11,19 +11,16 @@ data class EarthSatelliteModel(
 ) {
     companion object {
 
-        fun EarthSatelliteModel.map(
+        fun map(
             title: String,
             bitmap: Bitmap,
             lat: String,
             lng: String
         ): SatelliteImageEntities {
             return SatelliteImageEntities(
+                 null,
                 title,
-                bitmap,
-                lat,
-                lng,
-                this.date.substring(0..9),
-                todayDate()
+                bitmap
             )
         }
     }

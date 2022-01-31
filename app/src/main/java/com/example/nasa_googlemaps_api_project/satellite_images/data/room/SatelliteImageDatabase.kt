@@ -9,7 +9,7 @@ import com.example.nasa_googlemaps_api_project.Converters
 import com.example.nasa_googlemaps_api_project.home.data.room.ImageOfDayDao
 import com.example.nasa_googlemaps_api_project.home.data.room.ImageOfDayEntities
 
-@Database(entities = [SatelliteImageEntities::class], version = 1, exportSchema = false)
+@Database(entities = [SatelliteImageEntities::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class SatelliteImageDatabase : RoomDatabase() {
 
@@ -27,7 +27,7 @@ abstract class SatelliteImageDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     SatelliteImageDatabase::class.java,
-                    "image_of_day_database"
+                    "satellite_image_database"
                 )
                     .fallbackToDestructiveMigration()
                     .build()

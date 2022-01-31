@@ -1,16 +1,28 @@
 package com.example.nasa_googlemaps_api_project.satellite_images.fragments
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
+import androidx.compose.ui.text.TextLayoutInput
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.nasa_googlemaps_api_project.*
 import com.example.nasa_googlemaps_api_project.databinding.FragmentMapsBinding
 import com.example.nasa_googlemaps_api_project.satellite_images.SatelliteViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -43,8 +55,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
 
     //current lat and lng coordinates
     private var lat: Double? = null
-    private var lng: Double
-    ? = null
+    private var lng: Double? = null
+
+    private lateinit var locationManager: LocationManager
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +74,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
 
         mapView = binding.mapView
 
+        locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
         mapView.apply {
             onCreate(savedInstanceState)
 
@@ -71,53 +88,53 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
 
         sharedViewModel.imageDataResult.observe(viewLifecycleOwner) {
 
-            Toast.makeText(activity, "done", Toast.LENGTH_SHORT).show()
             it.onSuccess { model ->
                 model?.let {
-                   binding.imagePreviewMaps?.bindImageViewToUrl(model.url, binding.loadingIndicatorCardMaps)
+                   binding.imagePreviewMaps.bindImageViewToUrl(model.url, binding.loadingIndicatorCardMaps)
                 }
             }
 
             it.onFailure {
-                binding.imagePreviewMaps?.visibility = View.GONE
-                binding.noDataLocation?.fade(true)
-                binding.loadingIndicatorCardMaps?.visibility = View.GONE
+                binding.imagePreviewMaps.visibility = View.GONE
+                binding.noDataLocation.fade(true)
+                binding.loadingIndicatorCardMaps.visibility = View.GONE
             }
         }
 
-        binding.cardCloseButton?.setOnClickListener {
-            binding.enterImageInfoLayout?.fade(false)
-            binding.noDataLocation?.visibility = View.GONE
-            binding.imagePreviewMaps?.visibility = View.GONE
-            binding.editTextFieldBottomMaps?.editableText?.clear()
-            binding.editTextFieldTopMaps?.editableText?.clear()
+        binding.cardCloseButton.setOnClickListener {
+            binding.enterImageInfoLayout.fade(false)
+            binding.noDataLocation.visibility = View.GONE
+            binding.imagePreviewMaps.visibility = View.GONE
+            binding.editTextFieldBottomMaps.editableText?.clear()
+            binding.editTextFieldTopMaps.editableText?.clear()
             sharedViewModel.clearImageData()
         }
 
-        binding.cardDoneIcon?.setOnClickListener {
+        binding.cardDoneIcon.setOnClickListener {
 
             sharedViewModel.imageDataResult.value?.onSuccess {
 
                 it?.let {
-                    binding.enterImageInfoLayout?.fade(false)
-                    binding.noDataLocation?.visibility = View.GONE
-                    binding.imagePreviewMaps?.visibility = View.GONE
-                    binding.editTextFieldBottomMaps?.editableText?.clear()
-                    binding.editTextFieldTopMaps?.editableText?.clear()
-                    sharedViewModel.clearImageData()
 
                     sharedViewModel.saveSatelliteImage(
                         it,
-                        binding.saveImageTitle?.text.toString(),
-                        binding.imagePreviewMaps?.drawable!!.toBitmap(),
+                        binding.textFieldTopMaps.editText?.text.toString(),
+                        binding.imagePreviewMaps.drawable!!.toBitmap(),
                         lat.toString(),
                         lng.toString()
                     )
+
+                    binding.enterImageInfoLayout.fade(false)
+                    binding.noDataLocation.visibility = View.GONE
+                    binding.imagePreviewMaps.visibility = View.GONE
+                    binding.editTextFieldBottomMaps.editableText?.clear()
+                    binding.editTextFieldTopMaps.editableText?.clear()
+                    sharedViewModel.clearImageData()
                 }
                 }
         }
 
-        binding.editTextFieldBottomMaps?.addTextChangedListener {
+        binding.editTextFieldBottomMaps.addTextChangedListener {
 
             it?.let {
                 when(it.length) {
@@ -139,7 +156,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
                     in 1..6 -> secondDash = true
 
                     10 -> {
-                        binding.noDataLocation?.visibility = View.GONE
+                        binding.noDataLocation.visibility = View.GONE
                         sharedViewModel.checkDateAndGetImage(
                             lat.toString(),
                             lng.toString(),
@@ -158,6 +175,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
         map = googleMap
         map.setOnMapLoadedCallback(this)
 
+        enableMyLocation()
+        moveToMyLocation()
+
         //keep markers for orientation changes
         sharedViewModel.markerPositionList.forEach {
             map.addMarker(MarkerOptions()
@@ -169,6 +189,76 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
         map.setOnCameraMoveListener {
             map.setOnMapLoadedCallback(this@MapsFragment)
             binding.loadingIndicatorTopMap.scaleY(true, 250)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == 0) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                enableMyLocation()
+            }
+        }
+    }
+
+    private fun isPermissionGranted() : Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun enableMyLocation() {
+        if(isPermissionGranted()) {
+            map.isMyLocationEnabled = true
+        } else {
+            requestPermissions(
+                arrayOf<String>(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION),
+                0
+            )
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun moveToMyLocation() {
+        var locationLatLng: LatLng
+        val gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        if(map.isMyLocationEnabled && gps && network) {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    locationLatLng = LatLng(
+                        location!!.latitude, location.longitude)
+
+                    map.addMarker(
+                        MarkerOptions()
+                            .position(locationLatLng)
+                            .title("Current Position")
+                    )
+
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        locationLatLng, 15f
+                    ))
+                }
+        } else {
+            locationLatLng = LatLng(37.42216782736121, -122.08407897285726)
+
+            map.addMarker(
+                MarkerOptions()
+                    .position(locationLatLng)
+                    .title("Current Position")
+            )
+
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                locationLatLng, 15f
+            ))
         }
     }
 
@@ -282,7 +372,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
 
                 //ADDED
 
-                binding.enterImageInfoLayout?.fade(true)
+                binding.enterImageInfoLayout.fade(true)
                 lat = it.position.latitude
                 lng = it.position.longitude
 

@@ -7,11 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "satellite_image_table")
 data class SatelliteImageEntities(
+    @PrimaryKey(autoGenerate = true) val id: Int?,
     val title: String,
-    val image: Bitmap,
-    val latitude: String,
-    val longitude: String,
-    val dateTaken: String,
-    val dateAdded: String,
-    @PrimaryKey(autoGenerate = true) val id: Int = 0
+    val image: Bitmap
 )

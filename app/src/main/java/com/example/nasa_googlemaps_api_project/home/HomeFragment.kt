@@ -70,12 +70,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding.marsImagesButtonHome.animateScaleOnLongClick()
-        binding.marsImagesButtonHome.setOnClickListener {
-            findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToMarsImagesFragment())
-        }
-
         binding.earthSatelliteViewButtonHome.animateScaleOnLongClick()
         binding.earthSatelliteViewButtonHome.setOnClickListener {
             findNavController().navigate(

@@ -1,16 +1,23 @@
 package com.example.nasa_googlemaps_api_project.satellite_images
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.nasa_googlemaps_api_project.Globals.validDate
+import com.example.nasa_googlemaps_api_project.home.data.room.ImageOfDayEntities
 import com.example.nasa_googlemaps_api_project.satellite_images.data.EarthSatelliteModel
 import com.example.nasa_googlemaps_api_project.satellite_images.data.EarthSatelliteRepository
+import com.example.nasa_googlemaps_api_project.satellite_images.data.room.SatelliteImageEntities
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 
 class SatelliteViewModel(
     private val repository: EarthSatelliteRepository
 ) : ViewModel() {
+
+    var satelliteImages: List<SatelliteImageEntities>? = null
+
+    val getCompleted = MutableLiveData<Boolean>()
 
     //Data for NASA api Satellite Images
     private val _imageDataResult = MutableLiveData<Result<EarthSatelliteModel?>>()
@@ -71,6 +78,14 @@ class SatelliteViewModel(
     ) {
         viewModelScope.launch {
             repository.saveSatelliteImage(model, title, bitmap, lat, lng)
+        }
+    }
+
+    fun getSatelliteImages() {
+        viewModelScope.launch {
+            satelliteImages = repository.getSatelliteImages()
+            Log.i("ViewModel", repository.getSatelliteImages().toString())
+            getCompleted.value = true
         }
     }
 }
