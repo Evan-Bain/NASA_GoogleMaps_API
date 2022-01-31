@@ -1,4 +1,4 @@
-package com.example.nasa_googlemaps_api_project.home
+package com.example.nasa_googlemaps_api_project
 
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule

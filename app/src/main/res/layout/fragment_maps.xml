@@ -10,11 +10,10 @@
 
     </data>
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/motion_layout_maps"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutDescription="@xml/fragment_maps_scene">
+        android:layout_height="match_parent" >
 
         <View
             android:id="@+id/app_bar_divider_top"
@@ -90,18 +89,31 @@
                     app:layout_constraintGuide_percent=".05"
                     android:orientation="horizontal"/>
 
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/bottom_guideline_maps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_percent=".95"
+                    android:orientation="horizontal"/>
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/enter_image_info_card"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:layout_constrainedHeight="true"
                     style="?attr/materialCardViewElevatedStyle"
                     app:layout_constraintStart_toStartOf="@id/left_guideline_maps"
                     app:layout_constraintEnd_toEndOf="@id/right_guideline_maps"
-                    app:layout_constraintTop_toTopOf="@id/top_guideline_maps" >
+                    app:layout_constraintTop_toTopOf="@id/top_guideline_maps"
+                    app:layout_constraintBottom_toBottomOf="@id/bottom_guideline_maps">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="wrap_content" >
 
                         <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/right_guideline_maps_card"
@@ -155,12 +167,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:hint="@string/title"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="20"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             app:layout_constraintTop_toBottomOf="@id/card_close_button"
                             app:layout_constraintStart_toStartOf="@id/left_guideline_maps_card"
                             app:layout_constraintEnd_toStartOf="@id/card_close_button">
 
                             <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edit_text_field_top_maps"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
 
@@ -172,16 +187,25 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/date"
                             android:layout_marginTop="8dp"
+                            app:startIconDrawable="@drawable/ic_calendar_24"
+                            app:startIconContentDescription="Calendar"
+                            app:helperTextEnabled="true"
+                            app:helperText="Format: YYYY-MM-DD"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="10"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             app:layout_constraintTop_toBottomOf="@id/text_field_top_maps"
                             app:layout_constraintStart_toStartOf="@id/left_guideline_maps_card"
                             app:layout_constraintEnd_toStartOf="@id/card_close_button">
 
                             <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edit_text_field_bottom_maps"
+                                android:inputType="date"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
 
                         </com.google.android.material.textfield.TextInputLayout>
+
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/image_preview_layout"
@@ -205,12 +229,20 @@
 
                             <com.google.android.material.progressindicator.CircularProgressIndicator
                             android:id="@+id/loading_indicator_card_maps"
-                                android:visibility="visible"
+                                android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:indeterminate="true"
                             app:trackCornerRadius="20dp"
                             android:layout_gravity="center"/>
+
+                            <TextView
+                                android:id="@+id/no_data_location"
+                                android:visibility="gone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/no_image_data_for_location"
+                                android:layout_gravity="center"/>
 
                         </androidx.cardview.widget.CardView>
 
@@ -224,6 +256,7 @@
                             app:layout_constraintTop_toBottomOf="@id/image_preview_layout" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                    </ScrollView>
 
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -251,5 +284,5 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

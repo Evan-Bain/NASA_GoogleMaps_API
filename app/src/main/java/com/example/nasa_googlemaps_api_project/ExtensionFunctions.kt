@@ -38,6 +38,7 @@ fun ImageView.bindImageViewToUrl(
     imageView: ImageView? = null, textView: TextView? = null
 ) {
     loadingIndicator?.visibility = View.VISIBLE
+    this.visibility = View.VISIBLE
 
     val imgUri = url.toUri().buildUpon().scheme("https").build()
     Glide.with(this.context)

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/enter_image_info_layout"
+    style="@style/Background55" >
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline_maps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".9"
+        android:orientation="vertical"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline_maps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".1"
+        android:orientation="vertical"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline_maps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".05"
+        android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline_maps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".95"
+        android:orientation="horizontal"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/enter_image_info_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constrainedHeight="true"
+        style="?attr/materialCardViewElevatedStyle"
+        app:layout_constraintStart_toStartOf="@id/left_guideline_maps"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline_maps"
+        app:layout_constraintTop_toTopOf="@id/top_guideline_maps"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_guideline_maps">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/right_guideline_maps_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_percent=".95"
+                    android:orientation="vertical"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/left_guideline_maps_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_percent=".05"
+                    android:orientation="vertical"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/top_guideline_maps_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_percent=".05"
+                    android:orientation="horizontal"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/bottom_guideline_maps_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_percent=".95"
+                    android:orientation="horizontal"/>
+
+                <TextView
+                    android:id="@+id/save_image_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save_image"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="@id/left_guideline_maps_card"
+                    app:layout_constraintTop_toTopOf="@id/card_close_button"
+                    app:layout_constraintBottom_toBottomOf="@id/card_close_button"/>
+
+                <Button
+                    android:id="@+id/card_close_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    app:icon="@drawable/ic_close_24dp"
+                    app:layout_constraintEnd_toEndOf="@id/right_guideline_maps_card"
+                    app:layout_constraintTop_toTopOf="@id/top_guideline_maps_card"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_field_top_maps"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/title"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintTop_toBottomOf="@id/card_close_button"
+                    app:layout_constraintStart_toStartOf="@id/left_guideline_maps_card"
+                    app:layout_constraintEnd_toStartOf="@id/card_close_button">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_field_bottom_maps"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/date"
+                    android:layout_marginTop="8dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintTop_toBottomOf="@id/text_field_top_maps"
+                    app:layout_constraintStart_toStartOf="@id/left_guideline_maps_card"
+                    app:layout_constraintEnd_toStartOf="@id/card_close_button">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/image_preview_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="216dp"
+                    app:cardCornerRadius="8dp"
+                    android:elevation="10dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="@id/left_guideline_maps_card"
+                    app:layout_constraintEnd_toEndOf="@id/right_guideline_maps_card"
+                    app:layout_constraintTop_toBottomOf="@id/text_field_bottom_maps"
+                    app:layout_constraintBottom_toTopOf="@id/card_done_icon">
+
+                    <com.github.chrisbanes.photoview.PhotoView
+                        android:id="@+id/image_preview_maps"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:layout_margin="8dp" />
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/loading_indicator_card_maps"
+                        android:visibility="visible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        app:trackCornerRadius="20dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/no_data_location"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_image_data_for_location"
+                        android:layout_gravity="center"/>
+
+                </androidx.cardview.widget.CardView>
+
+                <Button
+                    android:id="@+id/card_done_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    app:icon="@drawable/ic_round_done_24"
+                    app:layout_constraintEnd_toEndOf="@id/right_guideline_maps_card"
+                    app:layout_constraintTop_toBottomOf="@id/image_preview_layout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

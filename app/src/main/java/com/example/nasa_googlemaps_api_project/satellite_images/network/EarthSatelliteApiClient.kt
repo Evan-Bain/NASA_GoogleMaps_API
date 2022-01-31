@@ -1,4 +1,4 @@
-package com.example.nasa_googlemaps_api_project.satellite_images.data.network
+package com.example.nasa_googlemaps_api_project.satellite_images.network
 
 import com.example.nasa_googlemaps_api_project.Globals
 import com.example.nasa_googlemaps_api_project.Globals.API_KEY
@@ -21,7 +21,7 @@ class EarthSatelliteApiClient {
             .build()
 
         private val client = OkHttpClient.Builder()
-            .addInterceptor { chain -> return@addInterceptor  addApiKeyToClient(chain)}
+            .addInterceptor { chain -> return@addInterceptor  addApiKeyToClient(chain) }
             .build()
 
         /** Creates the api for for the Earth Satellite **/

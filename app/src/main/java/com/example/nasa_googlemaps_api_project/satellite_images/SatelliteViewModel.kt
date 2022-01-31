@@ -1,12 +1,10 @@
 package com.example.nasa_googlemaps_api_project.satellite_images
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.nasa_googlemaps_api_project.home.data.ImageOfDayModel
+import android.graphics.Bitmap
+import androidx.lifecycle.*
+import com.example.nasa_googlemaps_api_project.Globals.validDate
 import com.example.nasa_googlemaps_api_project.satellite_images.data.EarthSatelliteModel
-import com.example.nasa_googlemaps_api_project.satellite_images.data.network.EarthSatelliteRepository
+import com.example.nasa_googlemaps_api_project.satellite_images.data.EarthSatelliteRepository
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 
@@ -14,7 +12,15 @@ class SatelliteViewModel(
     private val repository: EarthSatelliteRepository
 ) : ViewModel() {
 
-    val image = MutableLiveData<EarthSatelliteModel>()
+    //Data for NASA api Satellite Images
+    private val _imageDataResult = MutableLiveData<Result<EarthSatelliteModel?>>()
+    val imageDataResult: LiveData<Result<EarthSatelliteModel?>>
+        get() = _imageDataResult
+
+    /** set imageData to null **/
+   fun clearImageData() {
+       _imageDataResult.value = Result.success(null)
+   }
 
     private val _markerPositionList = mutableListOf<LatLng>()
     val markerPositionList: List<LatLng>
@@ -40,10 +46,31 @@ class SatelliteViewModel(
         _googleMapsButton.value = null
     }
 
-    fun getImage(lat: String, lng: String) {
+    /** Gets image from database and in case of failure returns a null value **/
+    private fun getImage(lat: String, lng: String, date: String) {
         viewModelScope.launch {
-            image.value = repository.getSatelliteImage(lat, lng)
+            _imageDataResult.value = repository.getSatelliteImage(lat, lng, date)
+
         }
     }
 
+    /** Checks if date is valid or not and gets image for the date if the date is valid **/
+    fun checkDateAndGetImage(lat: String, lng: String, date: String) {
+        validDate(date)?.let {
+            getImage(lat, lng, it)
+        }
+    }
+
+    /** Save satellite image and data to room database **/
+    fun saveSatelliteImage(
+        model: EarthSatelliteModel,
+        title: String,
+        bitmap: Bitmap,
+        lat: String,
+        lng: String
+    ) {
+        viewModelScope.launch {
+            repository.saveSatelliteImage(model, title, bitmap, lat, lng)
+        }
+    }
 }

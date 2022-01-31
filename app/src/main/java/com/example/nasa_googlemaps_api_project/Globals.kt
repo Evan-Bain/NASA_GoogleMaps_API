@@ -1,5 +1,7 @@
 package com.example.nasa_googlemaps_api_project
 
+import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.util.*
 
 object Globals {
@@ -45,5 +47,49 @@ object Globals {
         }
 
         return "$randomYear-$randomMonth-$randomDay"
+    }
+
+    /** returns a valid date or null depending on if the string is a valid date
+     *  FORMAT: YYYY-MM-DD **/
+    fun validDate(text: String): String? {
+        val date = SimpleDateFormat("yyyy-MM-DD", Locale.getDefault())
+        return try {
+            date.parse(text)
+
+            //if date is chosen is equal to or less than 2013
+            if(text.substring(0..3).toInt() <= 2013) {
+
+                return if(text.substring(0..3).toInt() < 2013) {
+                    //if date is less than 2013 return closest, valid date
+                    "2013-04-01"
+                } else {
+                    //if date is equal to 2013
+                    return if(text.substring(5..6).toInt() < 4) {
+                        //if month is less than april change it to april
+                        "2013-04-01"
+                    } else {
+                        //if month is greater than april or equal to april
+                        val newDate = "2013-" + text.substring(5..6).toInt() + "-" +
+                                text.substring(8..9).toInt()
+
+                        //Handle exception for chosen date landed on the extra day in a leap year
+                        try {
+                            //wasn't a leap year date
+                            date.parse(newDate)
+                            newDate
+                        } catch (e: Exception) {
+                            //was a leap year
+                            "2013-" + text.substring(5..6).toInt() + "-" +
+                                    text.substring(8..9).toInt().minus(1)
+                        }
+                    }
+                }
+            }
+
+            //if date fell into a date usable by api return it
+            text
+        } catch (e:Exception) {
+            null
+        }
     }
 }

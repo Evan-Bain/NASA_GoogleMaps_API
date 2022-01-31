@@ -16,4 +16,5 @@
     <string name="title">Title</string>
     <string name="date">Date</string>
     <string name="save_image">Save image</string>
+    <string name="no_image_data_for_location">No image data available</string>
 </resources>

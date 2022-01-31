@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.nasa_googlemaps_api_project.*
 import com.example.nasa_googlemaps_api_project.databinding.FragmentMapsBinding
@@ -30,6 +33,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
     //determine if map is loading up again
     private var firstLoad = true
 
+    //determine if date is being entered in for first time
+    //auto apply first dash
+    private var firstDash = true
+
+    //determine if date is being entered for the first time
+    //auto apply second dash
+    private var secondDash = true
+
+    //current lat and lng coordinates
+    private var lat: Double? = null
+    private var lng: Double
+    ? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,12 +69,84 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
 
         //ADDED
 
-        sharedViewModel.image.observe(viewLifecycleOwner) {
-            binding.imagePreviewMaps?.bindImageViewToUrl(it.url, binding.loadingIndicatorCardMaps)
+        sharedViewModel.imageDataResult.observe(viewLifecycleOwner) {
+
+            Toast.makeText(activity, "done", Toast.LENGTH_SHORT).show()
+            it.onSuccess { model ->
+                model?.let {
+                   binding.imagePreviewMaps?.bindImageViewToUrl(model.url, binding.loadingIndicatorCardMaps)
+                }
+            }
+
+            it.onFailure {
+                binding.imagePreviewMaps?.visibility = View.GONE
+                binding.noDataLocation?.fade(true)
+                binding.loadingIndicatorCardMaps?.visibility = View.GONE
+            }
         }
 
         binding.cardCloseButton?.setOnClickListener {
-            binding.enterImageInfoLayout?.fade(false, 1000)
+            binding.enterImageInfoLayout?.fade(false)
+            binding.noDataLocation?.visibility = View.GONE
+            binding.imagePreviewMaps?.visibility = View.GONE
+            binding.editTextFieldBottomMaps?.editableText?.clear()
+            binding.editTextFieldTopMaps?.editableText?.clear()
+            sharedViewModel.clearImageData()
+        }
+
+        binding.cardDoneIcon?.setOnClickListener {
+
+            sharedViewModel.imageDataResult.value?.onSuccess {
+
+                it?.let {
+                    binding.enterImageInfoLayout?.fade(false)
+                    binding.noDataLocation?.visibility = View.GONE
+                    binding.imagePreviewMaps?.visibility = View.GONE
+                    binding.editTextFieldBottomMaps?.editableText?.clear()
+                    binding.editTextFieldTopMaps?.editableText?.clear()
+                    sharedViewModel.clearImageData()
+
+                    sharedViewModel.saveSatelliteImage(
+                        it,
+                        binding.saveImageTitle?.text.toString(),
+                        binding.imagePreviewMaps?.drawable!!.toBitmap(),
+                        lat.toString(),
+                        lng.toString()
+                    )
+                }
+                }
+        }
+
+        binding.editTextFieldBottomMaps?.addTextChangedListener {
+
+            it?.let {
+                when(it.length) {
+                    4 -> {
+                        if(firstDash) {
+                            it.append("-")
+                            firstDash = false
+                        }
+                    }
+                    7 -> {
+                        if(secondDash) {
+                            it.append("-")
+                            secondDash = false
+                        }
+                    }
+
+                    in 1..3 -> firstDash = true
+
+                    in 1..6 -> secondDash = true
+
+                    10 -> {
+                        binding.noDataLocation?.visibility = View.GONE
+                        sharedViewModel.checkDateAndGetImage(
+                            lat.toString(),
+                            lng.toString(),
+                            it.toString())
+                    }
+                }
+            }
         }
 
         //ADDED
@@ -188,18 +276,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
                 }
             }
 
-            //move to marker position and display enter_image_info view
+            //display enter_image_info view
             this.setOnInfoWindowClickListener {
                 animateCameraMove(it.position)
 
                 //ADDED
 
-                binding.enterImageInfoLayout?.fade(true, 1000)
-
-                sharedViewModel.getImage(
-                    it.position.latitude.toString(),
-                    it.position.longitude.toString()
-                )
+                binding.enterImageInfoLayout?.fade(true)
+                lat = it.position.latitude
+                lng = it.position.longitude
 
                 //ADDED
             }
@@ -207,12 +292,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
             //move to marker position and show the marker title
             this.setOnMarkerClickListener {
                 animateCameraMove(it.position)
+
                 it.showInfoWindow()
                 true
             }
         } else {
+            //info click listener not disabled as it can only be activated by marker listener
             this.setOnMapClickListener(null)
-            this.setOnInfoWindowClickListener(null)
             this.setOnMarkerClickListener(null)
         }
 
