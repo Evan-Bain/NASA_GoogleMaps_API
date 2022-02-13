@@ -1,5 +1,6 @@
 package com.example.nasa_googlemaps_api_project
 
+import android.util.Log
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -12,14 +13,14 @@ object Globals {
     fun todayDate(): String {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR).toString()
-        var month = (calendar.get(Calendar.MONTH) + 1).toString()
+        var month = (calendar.get(Calendar.MONTH)).plus(1).toString()
         month = if(month.length == 1) {
             "0$month"
         } else {
             month
         }
 
-        var day = calendar.get(Calendar.DAY_OF_MONTH + 1).toString()
+        var day = calendar.get(Calendar.DAY_OF_MONTH).toString()
         day = if(day.length == 1) {
             "0$day"
         } else {

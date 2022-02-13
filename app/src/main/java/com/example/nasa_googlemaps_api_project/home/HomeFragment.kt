@@ -2,9 +2,11 @@ package com.example.nasa_googlemaps_api_project.home
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.nasa_googlemaps_api_project.animateScaleOnLongClick
@@ -41,7 +43,6 @@ class HomeFragment : Fragment() {
                     binding.imageOfTheDay,
                     binding.imageOfTheDayText
                 )
-
             }
         }
 
@@ -65,6 +66,7 @@ class HomeFragment : Fragment() {
                 }
             } else {
                 binding.loadingIndicatorHome.visibility = View.GONE
+
                 binding.errorTextHome.fade(true, 1000)
                 binding.errorTryAgainButtonHome.fade(true, 1000)
             }
@@ -84,8 +86,8 @@ class HomeFragment : Fragment() {
 
         //Retries getting the Nasa Image of the day
         binding.errorTryAgainButtonHome.setOnClickListener {
-            binding.errorTextHome.fade(false)
-            binding.errorTryAgainButtonHome.fade(false)
+            binding.errorTextHome.visibility = View.GONE
+            binding.errorTryAgainButtonHome.visibility = View.GONE
 
             binding.loadingIndicatorHome.visibility = View.VISIBLE
             viewModel.getImageData()

@@ -24,9 +24,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.Projection
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlin.math.abs
 import kotlin.math.sign
@@ -82,7 +80,9 @@ fun ImageView.bindImageViewToUrl(
 //END OF BIND IMAGE TO URL
 
 /** Create an animated marker on map click **/
-fun GoogleMap.createMarker(position: LatLng) {
+fun GoogleMap.createMarker(
+    position: LatLng,
+    tag: Int): Marker? {
 
     val proj: Projection = this.projection
     val targetPoint = proj.toScreenLocation(position)
@@ -92,11 +92,15 @@ fun GoogleMap.createMarker(position: LatLng) {
 
     val marker = this.addMarker(
         MarkerOptions()
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
             .position(startLatLng)
             .title("View image")
     )
+    marker?.tag = tag
 
     animateMarker(marker, position, LatLngInterpolator.LinearFixed())
+
+    return marker
 }
 
 /* Copyright 2013 Google Inc.
@@ -147,6 +151,9 @@ interface LatLngInterpolator {
 
 /** Fades a view in or out **/
 fun View.fade(fadeIn: Boolean, animDuration: Long? = null) {
+
+    val view = this
+
     if (fadeIn) {
         //if view is gone make it visible
         if(this.visibility == View.GONE) {
@@ -160,7 +167,6 @@ fun View.fade(fadeIn: Boolean, animDuration: Long? = null) {
             start()
         }
     } else {
-        val view = this
         ObjectAnimator.ofFloat(this, View.ALPHA, 0f).apply {
 
             duration = animDuration ?: duration

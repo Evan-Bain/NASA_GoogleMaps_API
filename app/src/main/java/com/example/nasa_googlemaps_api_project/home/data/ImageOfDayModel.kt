@@ -10,7 +10,7 @@ data class ImageOfDayModel(
     @field:Json(name = "date") val date: String,
     @field:Json(name="media_type") val media_type: String,
     @field:Json(name="title") val title: String,
-    @field:Json(name="url") val url: String?,
+    @field:Json(name="url") val url: String,
 ) {
     companion object {
         fun ImageOfDayModel.map(bitmap: Bitmap): ImageOfDayEntities {

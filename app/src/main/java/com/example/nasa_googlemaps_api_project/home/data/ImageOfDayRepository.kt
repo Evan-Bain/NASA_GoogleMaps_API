@@ -44,7 +44,7 @@ class ImageOfDayRepository(
             }
 
         } catch (e: Exception) {
-            Log.e("ImageOfDayRepository", e.toString())
+            Log.e("ImageOfDayRepository", "imageOfTheDayModel: $e")
             Result.failure(e)
         }
     }
@@ -59,7 +59,7 @@ class ImageOfDayRepository(
                 Result.success(entity.await())
             }
         } catch(e: Exception) {
-            Log.e("ImageOfDayRepository", e.toString())
+            Log.e("ImageOfDayRepository", "imageOfTheDayEntity: $e")
             Result.failure(e)
         }
     }
@@ -79,7 +79,7 @@ class ImageOfDayRepository(
         return@withContext try{
             Result.success(data.date == todayDate())
         } catch(e: Exception) {
-            Log.e("ImageOfDayRepository", e.toString())
+            Log.e("ImageOfDayRepository", "isDataCached: $e")
             Result.failure(e)
         }
     }

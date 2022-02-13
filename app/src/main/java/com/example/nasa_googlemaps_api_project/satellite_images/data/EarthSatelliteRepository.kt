@@ -1,6 +1,7 @@
 package com.example.nasa_googlemaps_api_project.satellite_images.data
 
 import android.graphics.Bitmap
+import android.util.Log
 import com.example.nasa_googlemaps_api_project.satellite_images.data.EarthSatelliteModel.Companion.map
 import com.example.nasa_googlemaps_api_project.satellite_images.data.room.SatelliteImageDao
 import com.example.nasa_googlemaps_api_project.satellite_images.data.room.SatelliteImageDatabase
@@ -39,5 +40,19 @@ class EarthSatelliteRepository(
         lng: String
     ) = withContext(defaultDispatcher) {
         database.insertEntity(model.map(title, bitmap, lat, lng))
+    }
+
+    suspend fun getSatelliteImages(): Result<List<SatelliteImageEntities>> {
+
+        return withContext(defaultDispatcher) {
+
+            try {
+                val model = async { database.getEntities() }
+                Result.success(model.await())
+            } catch (e: Exception) {
+                Log.e("EarthSatelliteRepository", e.toString())
+                Result.failure(e)
+            }
+        }
     }
 }

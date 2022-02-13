@@ -2,6 +2,7 @@ package com.example.nasa_googlemaps_api_project.home
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.nasa_googlemaps_api_project.home.data.ImageOfDayModel
 import com.example.nasa_googlemaps_api_project.home.data.ImageOfDayRepository

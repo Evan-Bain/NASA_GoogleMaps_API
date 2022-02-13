@@ -1,34 +1,69 @@
 package com.example.nasa_googlemaps_api_project.satellite_images
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.nasa_googlemaps_api_project.Globals.validDate
 import com.example.nasa_googlemaps_api_project.satellite_images.data.EarthSatelliteModel
 import com.example.nasa_googlemaps_api_project.satellite_images.data.EarthSatelliteRepository
+import com.example.nasa_googlemaps_api_project.satellite_images.data.room.SatelliteImageEntities
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class SatelliteViewModel(
     private val repository: EarthSatelliteRepository
 ) : ViewModel() {
+
+    //current lat and lng coordinates
+    var lat: Double? = null
+    var lng: Double? = null
+
+    //currently added marker on map
+    var addedMarker: Marker? = null
+
+    //determine if preview card is active
+    var previewCardActive = false
+
+    //list of all data marker tags
+    val markerList: MutableList<Marker> = mutableListOf()
+
+    //integer used for unique marker tags
+    var markersAdded: Int = 0
 
     //Data for NASA api Satellite Images
     private val _imageDataResult = MutableLiveData<Result<EarthSatelliteModel?>>()
     val imageDataResult: LiveData<Result<EarthSatelliteModel?>>
         get() = _imageDataResult
 
+    private val _imageEntities = MutableLiveData<List<SatelliteImageEntities>>()
+    val imageEntities: LiveData<List<SatelliteImageEntities>>
+        get() =  _imageEntities
+
+    //Holds value of the marker's tag that was clicked last
+    var currentMarker: Int = 0
+
     /** set imageData to null **/
    fun clearImageData() {
        _imageDataResult.value = Result.success(null)
    }
 
-    private val _markerPositionList = mutableListOf<LatLng>()
-    val markerPositionList: List<LatLng>
-        get() = _markerPositionList
+    val markerPositionList: LiveData<List<LatLng>> = Transformations.map(imageEntities) {
 
-    /** Add position of a marker to markerPositionList **/
-    fun addMarker(position: LatLng) {
-        _markerPositionList.add(position)
+        val markerList: MutableList<LatLng> = mutableListOf()
+
+        for(i in it) {
+            try {
+                markerList.add(LatLng(
+                    i.latitude.toDouble(),
+                    i.longitude.toDouble()))
+            } catch (e: Exception) {
+                Log.e("SatelliteViewModel", e.toString())
+            }
+        }
+
+        markerList
     }
 
     private val _googleMapsButton = MutableLiveData<Boolean?>()
@@ -71,6 +106,19 @@ class SatelliteViewModel(
     ) {
         viewModelScope.launch {
             repository.saveSatelliteImage(model, title, bitmap, lat, lng)
+
+            repository.getSatelliteImages().onSuccess {
+                _imageEntities.value = it
+            }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+
+            repository.getSatelliteImages().onSuccess {
+                _imageEntities.value = it
+            }
         }
     }
 }
