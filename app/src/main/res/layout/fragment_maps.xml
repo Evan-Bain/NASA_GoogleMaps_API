@@ -213,7 +213,7 @@
                             android:layout_width="0dp"
                             android:layout_height="216dp"
                             app:cardCornerRadius="8dp"
-                            android:elevation="10dp"
+                            android:elevation="8dp"
                             android:layout_marginTop="16dp"
                             app:layout_constraintStart_toStartOf="@id/left_guideline_maps_card"
                             app:layout_constraintEnd_toEndOf="@id/right_guideline_maps_card"
