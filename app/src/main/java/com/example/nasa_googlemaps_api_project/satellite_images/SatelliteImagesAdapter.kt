@@ -13,7 +13,7 @@ import com.example.nasa_googlemaps_api_project.satellite_images.data.room.Satell
 private const val TITLE = 0
 private const val CARD_VIEW = 1
 
-class SatelliteImagesAdapter :
+class SatelliteImagesAdapter(private val onClick: (SatelliteImageEntities) -> Unit) :
     ListAdapter<SatelliteImageEntities, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -70,6 +70,10 @@ class SatelliteImagesAdapter :
             recyclerImageSatellite.setImageBitmap(item.image)
             recyclerTextTitle.text = item.title
             recyclerTextDate.text = item.dateTaken
+
+            root.setOnClickListener {
+                onClick(item)
+            }
         }
     }
 

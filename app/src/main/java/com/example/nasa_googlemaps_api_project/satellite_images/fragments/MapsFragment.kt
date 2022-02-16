@@ -305,7 +305,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
                 }
                 animateCameraMove(it.position)
 
-                binding.enterImageInfoLayout?.fade(true)
+                binding.enterImageInfoLayout.fade(true)
                 sharedViewModel.lat = it.position.latitude
                 sharedViewModel.lng = it.position.longitude
             }
@@ -328,7 +328,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
     /** setups logic and click listeners for the save image card view (dialog) **/
     private fun setupDataCardView() {
 
-        binding.spaceFromEnd?.visibility = View.GONE
+        binding.spaceFromEnd.visibility = View.GONE
 
         //add action when viewModel's imageDataResult value is changed
         sharedViewModel.imageDataResult.observe(viewLifecycleOwner) {
@@ -338,30 +338,32 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
                 //if success use glide to display image
                 it.onSuccess { model ->
                     model?.let {
-                        binding.imagePreviewMaps?.bindImageViewToUrl(model.url, binding.loadingIndicatorCardMaps)
+                        binding.imagePreviewMaps.bindImageViewToUrl(model.url, binding.loadingIndicatorCardMaps)
                     }
                 }
 
                 //if failure alert user there is no data available
                 it.onFailure {
-                    binding.imagePreviewMaps?.visibility = View.GONE
-                    binding.noDataLocation?.fade(true)
-                    binding.loadingIndicatorCardMaps?.visibility = View.GONE
+                    binding.imagePreviewMaps.visibility = View.GONE
+                    binding.noDataLocation.fade(true)
+                    binding.loadingIndicatorCardMaps.visibility = View.GONE
                 }
             }
         }
 
         //logic for pressing "x" button on cardView
-        binding.cardCloseButton?.setOnClickListener {
+        binding.cardCloseButton.setOnClickListener {
 
             //fade out and make current views disappear so they don't display next time cardView
             //is displayed
-            binding.enterImageInfoLayout?.fade(false)
-            binding.noDataLocation?.visibility = View.GONE
-            binding.imagePreviewMaps?.visibility = View.GONE
-            binding.editTextFieldBottomMaps?.editableText?.clear()
-            binding.editTextFieldTopMaps?.editableText?.clear()
+            binding.enterImageInfoLayout.fade(false)
+            binding.noDataLocation.visibility = View.GONE
+            binding.imagePreviewMaps.visibility = View.GONE
+            binding.editTextFieldBottomMaps.editableText?.clear()
+            binding.editTextFieldTopMaps.editableText?.clear()
             sharedViewModel.clearImageData()
+            map.setClickListeners(true)
+
 
             for(i in sharedViewModel.markerList) {
                 if(sharedViewModel.currentMarker == i.tag) {
@@ -371,21 +373,21 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
         }
 
         //If card view was last in preview mode change to data mode
-        if(binding.cardDoneIcon?.visibility == View.GONE) {
+        if(binding.cardDoneIcon.visibility == View.GONE) {
 
             binding.apply {
-                cardDoneIcon?.visibility = View.VISIBLE
-                editTextFieldBottomMaps?.isFocusableInTouchMode = true
-                editTextFieldTopMaps?.isFocusableInTouchMode = true
-                textFieldBottomMaps?.isHelperTextEnabled = true
-                textFieldBottomMaps?.helperText = "Format: YYYY-MM-DD"
-                textFieldTopMaps?.isCounterEnabled = true
-                textFieldBottomMaps?.isCounterEnabled = true
+                cardDoneIcon.visibility = View.VISIBLE
+                editTextFieldBottomMaps.isFocusableInTouchMode = true
+                editTextFieldTopMaps.isFocusableInTouchMode = true
+                textFieldBottomMaps.isHelperTextEnabled = true
+                textFieldBottomMaps.helperText = "Format: YYYY-MM-DD"
+                textFieldTopMaps.isCounterEnabled = true
+                textFieldBottomMaps.isCounterEnabled = true
             }
         }
 
         //logic for check button on cardView
-        binding.cardDoneIcon?.setOnClickListener {
+        binding.cardDoneIcon.setOnClickListener {
 
             try {
                 //only add functionality if data was received successfully
@@ -396,20 +398,21 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
                         //save image to room database
                         sharedViewModel.saveSatelliteImage(
                             it,
-                            binding.textFieldTopMaps?.editText?.text.toString(),
-                            binding.imagePreviewMaps?.drawable!!.toBitmap(),
+                            binding.textFieldTopMaps.editText?.text.toString(),
+                            binding.imagePreviewMaps.drawable!!.toBitmap(),
                             sharedViewModel.lat.toString(),
                             sharedViewModel.lng.toString()
                         )
 
                         //make cardView fade out and views disappear so they aren't displayed when
                         //cardView is reopened
-                        binding.enterImageInfoLayout?.fade(false)
-                        binding.noDataLocation?.visibility = View.GONE
-                        binding.imagePreviewMaps?.visibility = View.GONE
-                        binding.editTextFieldBottomMaps?.editableText?.clear()
-                        binding.editTextFieldTopMaps?.editableText?.clear()
+                        binding.enterImageInfoLayout.fade(false)
+                        binding.noDataLocation.visibility = View.GONE
+                        binding.imagePreviewMaps.visibility = View.GONE
+                        binding.editTextFieldBottomMaps.editableText?.clear()
+                        binding.editTextFieldTopMaps.editableText?.clear()
                         sharedViewModel.clearImageData()
+                        map.setClickListeners(true)
 
                         for(i in sharedViewModel.markerList) {
                             if(sharedViewModel.currentMarker == i.tag) {
@@ -424,7 +427,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
         }
 
         //alter date edit text for user
-        binding.editTextFieldBottomMaps?.addTextChangedListener {
+        binding.editTextFieldBottomMaps.addTextChangedListener {
 
             it?.let {
                 when(it.length) {
@@ -446,7 +449,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
                     in 1..6 -> secondDash = true
 
                     10 -> {
-                        binding.noDataLocation?.visibility = View.GONE
+                        binding.noDataLocation.visibility = View.GONE
                         sharedViewModel.checkDateAndGetImage(
                             sharedViewModel.lat.toString(),
                             sharedViewModel.lng.toString(),
@@ -460,38 +463,39 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLoadedCallba
     private fun setupPreviewCardView() {
 
         sharedViewModel.previewCardActive = true
-        binding.spaceFromEnd?.visibility = View.VISIBLE
-        binding.imagePreviewMaps?.visibility = View.VISIBLE
+        binding.spaceFromEnd.visibility = View.VISIBLE
+        binding.imagePreviewMaps.visibility = View.VISIBLE
 
         //Disable edit functionality
         binding.apply {
-            cardDoneIcon?.visibility = View.GONE
-            editTextFieldTopMaps?.isFocusableInTouchMode = false
-            editTextFieldBottomMaps?.isFocusableInTouchMode = false
-            textFieldBottomMaps?.isHelperTextEnabled = false
-            textFieldTopMaps?.isCounterEnabled = false
-            textFieldBottomMaps?.isCounterEnabled = false
+            cardDoneIcon.visibility = View.GONE
+            editTextFieldTopMaps.isFocusableInTouchMode = false
+            editTextFieldBottomMaps.isFocusableInTouchMode = false
+            textFieldBottomMaps.isHelperTextEnabled = false
+            textFieldTopMaps.isCounterEnabled = false
+            textFieldBottomMaps.isCounterEnabled = false
         }
 
         sharedViewModel.imageEntities.value?.let {
 
             binding.apply {
-                editTextFieldTopMaps?.setText(it[sharedViewModel.currentMarker].title)
-                editTextFieldBottomMaps?.setText(it[sharedViewModel.currentMarker].dateTaken)
-                imagePreviewMaps?.setImageBitmap(it[sharedViewModel.currentMarker].image)
+                editTextFieldTopMaps.setText(it[sharedViewModel.currentMarker].title)
+                editTextFieldBottomMaps.setText(it[sharedViewModel.currentMarker].dateTaken)
+                imagePreviewMaps.setImageBitmap(it[sharedViewModel.currentMarker].image)
             }
         }
 
         //logic for pressing "x" button on cardView
-        binding.cardCloseButton?.setOnClickListener {
+        binding.cardCloseButton.setOnClickListener {
 
             sharedViewModel.previewCardActive = false
             //fade out and make current views disappear so they don't display next time cardView
             //is displayed
-            binding.enterImageInfoLayout?.fade(false)
-            binding.imagePreviewMaps?.visibility = View.GONE
-            binding.editTextFieldBottomMaps?.editableText?.clear()
-            binding.editTextFieldTopMaps?.editableText?.clear()
+            map.setClickListeners(true)
+            binding.enterImageInfoLayout.fade(false)
+            binding.imagePreviewMaps.visibility = View.GONE
+            binding.editTextFieldBottomMaps.editableText?.clear()
+            binding.editTextFieldTopMaps.editableText?.clear()
             sharedViewModel.clearImageData()
         }
     }

@@ -21,6 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:transitionName="startingImage"
             android:contentDescription="@string/satellite_view_of_certain_location"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"

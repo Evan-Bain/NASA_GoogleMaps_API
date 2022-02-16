@@ -1,14 +1,16 @@
 package com.example.nasa_googlemaps_api_project.satellite_images.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.nasa_googlemaps_api_project.R
 import com.example.nasa_googlemaps_api_project.databinding.FragmentSatelliteImagesBinding
 import com.example.nasa_googlemaps_api_project.satellite_images.SatelliteImagesAdapter
 import com.example.nasa_googlemaps_api_project.satellite_images.SatelliteViewModel
@@ -35,8 +37,13 @@ class SatelliteImagesFragment : Fragment() {
 
         binding.viewModel = sharedViewModel
 
+        val navHostFragment = requireActivity().supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
         //setting up recyclerView
-        val adapter = SatelliteImagesAdapter()
+        val adapter = SatelliteImagesAdapter {
+            adapterClick(it, navHostFragment.navController)
+        }
         binding.satelliteImagesRecycler.adapter = adapter
 
         //allowing three images to be shown in one row with the title text only by itself
@@ -44,10 +51,10 @@ class SatelliteImagesFragment : Fragment() {
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return when(adapter.getItemViewType(position)) {
-                    adapter.TITLE -> {
+                    0 -> {
                         3
                     }
-                    adapter.CARD_VIEW -> {
+                    1 -> {
                         1
                     }
                     else -> -1
@@ -59,6 +66,13 @@ class SatelliteImagesFragment : Fragment() {
         return binding.root
     }
 
+    private fun adapterClick(
+        item: SatelliteImageEntities, navController: NavController) {
+        sharedViewModel.setPassedData(item)
+
+        navController.navigate(SatelliteImagesFragmentDirections
+            .actionSatelliteImagesFragmentToSatelliteImagePreviewFragment())
+    }
 }
 
 //setting the data in the recyclerView

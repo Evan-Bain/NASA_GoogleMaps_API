@@ -13,8 +13,8 @@
         <action
             android:id="@+id/action_homeFragment_to_satelliteImagesFragment"
             app:destination="@id/satelliteImagesFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/satelliteImagesFragment"
@@ -29,6 +29,13 @@
             app:popEnterAnim="@anim/slide_down_into"
             app:popExitAnim="@anim/slide_down_out"
             app:popUpTo="@id/satelliteImagesFragment" />
+        <action
+            android:id="@+id/action_satelliteImagesFragment_to_satelliteImagePreviewFragment"
+            app:destination="@id/satelliteImagePreviewFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
@@ -36,5 +43,10 @@
         android:label="Map"
         tools:layout="@layout/fragment_maps">
     </fragment>
+    <fragment
+        android:id="@+id/satelliteImagePreviewFragment"
+        android:name="com.example.nasa_googlemaps_api_project.satellite_images.fragments.SatelliteImagePreviewFragment"
+        android:label="Preview"
+        tools:layout="@layout/fragment_satellite_image_preview"/>
 
 </navigation>

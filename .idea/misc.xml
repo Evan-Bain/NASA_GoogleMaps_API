@@ -5,8 +5,10 @@
       <map>
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1425" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/drawable/ic_calendar_24.xml" value="0.1425" />
+        <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/drawable/ic_close_24dp.xml" value="0.16" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/drawable/ic_close_black_24dp.xml" value="0.1425" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22314814814814815" />
+        <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1155" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/drawable/ic_round_done_24.xml" value="0.1425" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/drawable/ic_round_keyboard_arrow_up_24.xml" value="0.1155" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/drawable/ic_round_maximize_24.xml" value="0.22314814814814815" />
@@ -19,10 +21,10 @@
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/activity_main.xml" value="0.12135416666666667" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/activity_view_pager.xml" value="0.22760416666666666" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/card_view_maps.xml" value="0.24166666666666667" />
-        <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/fragment_home.xml" value="0.2037037037037037" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/fragment_maps.xml" value="0.22333333333333336" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/fragment_mars_images.xml" value="0.2341485507246377" />
-        <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/fragment_satellite_image_preview.xml" value="0.24166666666666667" />
+        <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/fragment_satellite_image_preview.xml" value="0.1" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/fragment_satellite_images.xml" value="0.22760416666666666" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/fragment_view_pager.xml" value="0.12135416666666667" />
         <entry key="..\:/Users/evanj/UdacityProjects/Nasa_GoogleMaps_Api_Project/app/src/main/res/layout/hsdsdf.xml" value="0.1453804347826087" />

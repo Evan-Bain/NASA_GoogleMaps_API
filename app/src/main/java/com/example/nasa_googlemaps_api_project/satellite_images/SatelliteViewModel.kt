@@ -32,6 +32,14 @@ class SatelliteViewModel(
     //integer used for unique marker tags
     var markersAdded: Int = 0
 
+    private val _passedData = MutableLiveData<SatelliteImageEntities>()
+    val passedData: LiveData<SatelliteImageEntities>
+        get() = _passedData
+
+    fun setPassedData(data: SatelliteImageEntities) {
+        _passedData.value = data
+    }
+
     //Data for NASA api Satellite Images
     private val _imageDataResult = MutableLiveData<Result<EarthSatelliteModel?>>()
     val imageDataResult: LiveData<Result<EarthSatelliteModel?>>

@@ -108,17 +108,6 @@
                 android:src="@drawable/nasa_logo_circle" />
 
             <Button
-                android:id="@+id/mars_images_button_home"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/images_of_mars_button"
-                android:text="@string/images_of_mars"
-                android:textStyle="bold"
-                tools:ignore="TouchTargetSizeCheck"
-                tools:layout_editor_absoluteX="32dp"
-                tools:layout_editor_absoluteY="359dp" />
-
-            <Button
                 android:id="@+id/earth_satellite_view_button_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
