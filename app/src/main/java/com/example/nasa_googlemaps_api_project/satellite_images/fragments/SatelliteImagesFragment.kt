@@ -1,11 +1,13 @@
 package com.example.nasa_googlemaps_api_project.satellite_images.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasa_googlemaps_api_project.databinding.FragmentSatelliteImagesBinding
 import com.example.nasa_googlemaps_api_project.satellite_images.SatelliteImagesAdapter
@@ -33,13 +35,33 @@ class SatelliteImagesFragment : Fragment() {
 
         binding.viewModel = sharedViewModel
 
-        binding.satelliteImagesRecycler.adapter = SatelliteImagesAdapter()
+        //setting up recyclerView
+        val adapter = SatelliteImagesAdapter()
+        binding.satelliteImagesRecycler.adapter = adapter
 
+        //allowing three images to be shown in one row with the title text only by itself
+        val gridLayoutManager = GridLayoutManager(requireContext(), 3)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when(adapter.getItemViewType(position)) {
+                    adapter.TITLE -> {
+                        3
+                    }
+                    adapter.CARD_VIEW -> {
+                        1
+                    }
+                    else -> -1
+                }
+            }
+        }
+
+        binding.satelliteImagesRecycler.layoutManager = gridLayoutManager
         return binding.root
     }
 
 }
 
+//setting the data in the recyclerView
 @BindingAdapter("data")
 fun setRecyclerData(recycler: RecyclerView, list: List<SatelliteImageEntities>) {
 
